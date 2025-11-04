@@ -1,160 +1,160 @@
-# User Registration and Login System with Smarty
+# Sistema de Registo e Login de Utilizadores com Smarty
 
-This is a complete user authentication system built with PHP, Smarty template engine, and MySQL.
+Este é um sistema completo de autenticação de utilizadores construído com PHP, motor de templates Smarty e MySQL.
 
-## Features
+## Funcionalidades
 
-### User Authentication
-- **User Registration** with validation
-- **User Login** with secure password hashing
-- **User Dashboard** showing profile information
-- **Session Management**
+### Autenticação de Utilizadores
+- **Registo de Utilizadores** com validação
+- **Login de Utilizadores** com hash seguro de palavras-passe
+- **Painel do Utilizador** a mostrar informação do perfil
+- **Gestão de Sessões**
 
-### Posts System (Registered Users Only)
-- **View All Posts** from all community members
-- **Create Posts** with title and content
-- **Edit Your Posts** with real-time character counter
-- **Delete Your Posts** with confirmation
-- **View Single Post** with full details and author information
-- **Privacy Protected** - Only logged-in users can see posts
+### Sistema de Publicações (Apenas Utilizadores Registados)
+- **Ver Todas as Publicações** de todos os membros da comunidade
+- **Criar Publicações** com título e conteúdo
+- **Editar as Suas Publicações** com contador de caracteres em tempo real
+- **Eliminar as Suas Publicações** com confirmação
+- **Ver Publicação Individual** com detalhes completos e informação do autor
+- **Privacidade Protegida** - Apenas utilizadores autenticados podem ver as publicações
 
 ### Design
-- **Responsive Design** - Works on all devices
-- **Modern UI** with gradient backgrounds
-- **Color-coded Actions** (Create, Edit, Delete buttons)
-- **Real-time Validation** and character counters
+- **Design Responsivo** - Funciona em todos os dispositivos
+- **Interface Moderna** com fundos de gradiente
+- **Ações Codificadas por Cor** (botões Criar, Editar, Eliminar)
+- **Validação em Tempo Real** e contadores de caracteres
 
-## Prerequisites
+## Pré-requisitos
 
-Before you begin, you need to install Docker and Docker Compose on your system.
+Antes de começar, precisa de instalar o Docker e o Docker Compose no seu sistema.
 
-### Installing Docker Desktop (Windows)
+### Instalar Docker Desktop (Windows)
 
-1. **Download Docker Desktop:**
-   - Go to [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
-   - Click "Download for Windows"
+1. **Transferir Docker Desktop:**
+   - Aceda a [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+   - Clique em "Download for Windows"
 
-2. **Install Docker Desktop:**
-   - Run the installer (Docker Desktop Installer.exe)
-   - Follow the installation wizard
-   - Enable WSL 2 if prompted (recommended)
-   - Restart your computer if required
+2. **Instalar Docker Desktop:**
+   - Execute o instalador (Docker Desktop Installer.exe)
+   - Siga o assistente de instalação
+   - Ative o WSL 2 se solicitado (recomendado)
+   - Reinicie o computador se necessário
 
-3. **Verify Installation:**
+3. **Verificar Instalação:**
    ```powershell
    docker --version
    docker-compose --version
    ```
-   You should see version numbers for both commands.
+   Deverá ver os números de versão para ambos os comandos.
 
-4. **Start Docker Desktop:**
-   - Launch Docker Desktop from the Start menu
-   - Wait for it to start (the Docker icon in the system tray will stop animating)
+4. **Iniciar Docker Desktop:**
+   - Inicie o Docker Desktop a partir do menu Iniciar
+   - Aguarde até estar totalmente iniciado (o ícone do Docker na bandeja do sistema deixará de estar animado)
 
-### Installing Docker (Linux)
+### Instalar Docker (Linux)
 
 ```bash
-# Update package index
+# Atualizar índice de pacotes
 sudo apt-get update
 
-# Install Docker
+# Instalar Docker
 sudo apt-get install -y docker.io
 
-# Install Docker Compose
+# Instalar Docker Compose
 sudo apt-get install -y docker-compose
 
-# Add your user to docker group (to run without sudo)
+# Adicionar o seu utilizador ao grupo docker (para executar sem sudo)
 sudo usermod -aG docker $USER
 
-# Log out and log back in for group changes to take effect
+# Termine e inicie sessão novamente para as alterações ao grupo fazerem efeito
 
-# Verify installation
+# Verificar instalação
 docker --version
 docker-compose --version
 ```
 
-### Installing Docker (macOS)
+### Instalar Docker (macOS)
 
-1. **Download Docker Desktop:**
-   - Go to [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
-   - Click "Download for Mac"
+1. **Transferir Docker Desktop:**
+   - Aceda a [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+   - Clique em "Download for Mac"
 
-2. **Install Docker Desktop:**
-   - Open the .dmg file
-   - Drag Docker to Applications folder
-   - Launch Docker from Applications
+2. **Instalar Docker Desktop:**
+   - Abra o ficheiro .dmg
+   - Arraste o Docker para a pasta Aplicações
+   - Inicie o Docker a partir de Aplicações
 
-3. **Verify Installation:**
+3. **Verificar Instalação:**
    ```bash
    docker --version
    docker-compose --version
    ```
 
-## Database Structure
+## Estrutura da Base de Dados
 
-### Users Table
-The application uses a `users` table with the following columns:
+### Tabela Users
+A aplicação utiliza uma tabela `users` com as seguintes colunas:
 - `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
 - `username` (VARCHAR(255), UNIQUE)
-- `password` (VARCHAR(255), hashed)
+- `password` (VARCHAR(255), com hash)
 - `email` (VARCHAR(255), UNIQUE)
 - `created_at` (TIMESTAMP)
 
-### Posts Table
-The `posts` table stores all user posts:
+### Tabela Posts
+A tabela `posts` armazena todas as publicações dos utilizadores:
 - `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
-- `user_id` (INT, FOREIGN KEY to users.id)
+- `user_id` (INT, FOREIGN KEY para users.id)
 - `title` (VARCHAR(255))
 - `content` (TEXT)
 - `created_at` (TIMESTAMP)
 - `updated_at` (TIMESTAMP)
-- **Relationships:** Each post belongs to a user; posts are deleted if user is deleted
+- **Relações:** Cada publicação pertence a um utilizador; as publicações são eliminadas se o utilizador for eliminado
 
-## Files Structure
+## Estrutura de Ficheiros
 
 ```
-├── config.php              # Database configuration
-├── index.php               # Home page (redirects based on login status)
-├── login.php               # Login handler
-├── register.php            # Registration handler
-├── logout.php              # Logout handler
-├── posts.php               # View all posts (registered users only)
-├── create_post.php         # Create new post
-├── view_post.php           # View single post details
-├── edit_post.php           # Edit post (owner only)
-├── delete_post.php         # Delete post (owner only)
+├── config.php              # Configuração da base de dados
+├── index.php               # Página inicial (redireciona com base no estado de login)
+├── login.php               # Gestor de login
+├── register.php            # Gestor de registo
+├── logout.php              # Gestor de logout
+├── posts.php               # Ver todas as publicações (apenas utilizadores registados)
+├── create_post.php         # Criar nova publicação
+├── view_post.php           # Ver detalhes de publicação individual
+├── edit_post.php           # Editar publicação (apenas proprietário)
+├── delete_post.php         # Eliminar publicação (apenas proprietário)
 ├── db/
-│   ├── init.sql           # Database initialization script (users + posts)
-│   └── posts.sql          # Posts table schema (backup)
+│   ├── init.sql           # Script de inicialização da base de dados (users + posts)
+│   └── posts.sql          # Esquema da tabela posts (backup)
 ├── templates/
-│   ├── home.tpl           # Home page template
-│   ├── login.tpl          # Login form template
-│   ├── register.tpl       # Registration form template
-│   ├── dashboard.tpl      # User dashboard template
-│   ├── posts.tpl          # All posts listing template
-│   ├── create_post.tpl    # Create post form template
-│   ├── view_post.tpl      # Single post view template
-│   └── edit_post.tpl      # Edit post form template
-├── templates_c/           # Smarty compiled templates (auto-generated)
-├── vendor/                # Composer dependencies (Smarty)
-├── README.md              # This file
-└── POSTS_GUIDE.md         # Detailed posts feature documentation
+│   ├── home.tpl           # Template da página inicial
+│   ├── login.tpl          # Template do formulário de login
+│   ├── register.tpl       # Template do formulário de registo
+│   ├── dashboard.tpl      # Template do painel do utilizador
+│   ├── posts.tpl          # Template de listagem de todas as publicações
+│   ├── create_post.tpl    # Template do formulário de criar publicação
+│   ├── view_post.tpl      # Template de visualização de publicação individual
+│   └── edit_post.tpl      # Template do formulário de editar publicação
+├── templates_c/           # Templates compilados do Smarty (gerados automaticamente)
+├── vendor/                # Dependências do Composer (Smarty)
+├── README.md              # Este ficheiro
+└── POSTS_GUIDE.md         # Documentação detalhada da funcionalidade de publicações
 ```
 
-## Project Setup Instructions
+## Instruções de Configuração do Projeto
 
-### Step 1: Clone or Download the Project
+### Passo 1: Clonar ou Transferir o Projeto
 
-If you have the project in a ZIP file, extract it. If it's in a Git repository:
+Se tiver o projeto num ficheiro ZIP, extraia-o. Se estiver num repositório Git:
 
 ```bash
-git clone <repository-url>
+git clone <url-do-repositorio>
 cd TB2
 ```
 
-### Step 2: Verify Project Structure
+### Passo 2: Verificar a Estrutura do Projeto
 
-Make sure you have these files in your project directory:
+Certifique-se de que tem estes ficheiros no seu diretório do projeto:
 ```
 TB2/
 ├── docker-compose.yml
@@ -174,18 +174,18 @@ TB2/
     └── dashboard.tpl
 ```
 
-### Step 3: Start Docker Desktop
+### Passo 3: Iniciar Docker Desktop
 
-**Windows/Mac:** Launch Docker Desktop and wait until it's fully running (the Docker icon in the system tray will be steady).
+**Windows/Mac:** Inicie o Docker Desktop e aguarde até estar totalmente em execução (o ícone do Docker na bandeja do sistema ficará estável).
 
-**Linux:** Docker daemon should start automatically. Verify with:
+**Linux:** O daemon Docker deverá iniciar automaticamente. Verifique com:
 ```bash
 sudo systemctl status docker
 ```
 
-### Step 4: Build and Start the Containers
+### Passo 4: Construir e Iniciar os Contentores
 
-Open a terminal/PowerShell in the project directory and run:
+Abra um terminal/PowerShell no diretório do projeto e execute:
 
 **Windows (PowerShell):**
 ```powershell
@@ -197,12 +197,12 @@ docker-compose up --build -d
 docker-compose up --build -d
 ```
 
-This command will:
-- Build the custom PHP container with Apache, Composer, and PDO MySQL
-- Pull MySQL and phpMyAdmin images
-- Start all three containers in detached mode
+Este comando irá:
+- Construir o contentor PHP personalizado com Apache, Composer e PDO MySQL
+- Obter as imagens MySQL e phpMyAdmin
+- Iniciar os três contentores em modo destacado
 
-**Expected output:**
+**Resultado esperado:**
 ```
 [+] Building ...
 [+] Running 4/4
@@ -212,9 +212,9 @@ This command will:
  ✔ Container tb2-phpmyadmin-1  Started
 ```
 
-### Step 5: Install Composer Dependencies
+### Passo 5: Instalar Dependências do Composer
 
-Once the containers are running, install Smarty via Composer:
+Assim que os contentores estiverem em execução, instale o Smarty via Composer:
 
 **Windows (PowerShell):**
 ```powershell
@@ -226,371 +226,371 @@ docker-compose exec www composer install
 docker-compose exec www composer install
 ```
 
-If you haven't installed Smarty yet:
+Se ainda não instalou o Smarty:
 ```powershell
 docker-compose exec www composer require smarty/smarty
 ```
 
-### Step 6: Wait for MySQL Initialization
+### Passo 6: Aguardar pela Inicialização do MySQL
 
-**Important:** Wait about 30-60 seconds for MySQL to fully initialize and create the database from `init.sql`.
+**Importante:** Aguarde cerca de 30-60 segundos para que o MySQL inicialize completamente e crie a base de dados a partir do `init.sql`.
 
-You can check if MySQL is ready:
+Pode verificar se o MySQL está pronto:
 ```powershell
 docker-compose logs db
 ```
 
-Look for a line like: `ready for connections` or `port: 3306`
+Procure por uma linha como: `ready for connections` ou `port: 3306`
 
-### Step 7: Access the Application
+### Passo 7: Aceder à Aplicação
 
-Open your web browser and navigate to:
-- **Main Application:** [http://localhost](http://localhost)
+Abra o seu navegador web e navegue para:
+- **Aplicação Principal:** [http://localhost](http://localhost)
 - **phpMyAdmin:** [http://localhost:8001](http://localhost:8001)
 
-### Step 8: Verify Installation
+### Passo 8: Verificar a Instalação
 
-1. You should see the welcome page with "Login" and "Register" buttons
-2. Try logging in with the test account:
-   - **Username:** `testuser`
-   - **Password:** `password123`
+1. Deverá ver a página de boas-vindas com os botões "Login" e "Register"
+2. Tente fazer login com a conta de teste:
+   - **Nome de utilizador:** `testuser`
+   - **Palavra-passe:** `password123`
 
-## Managing the Application
+## Gerir a Aplicação
 
-### View Running Containers
+### Ver Contentores em Execução
 ```powershell
 docker-compose ps
 ```
 
-### View Container Logs
+### Ver Registos dos Contentores
 ```powershell
-# All containers
+# Todos os contentores
 docker-compose logs
 
-# Specific container
+# Contentor específico
 docker-compose logs www
 docker-compose logs db
 docker-compose logs phpmyadmin
 
-# Follow logs in real-time
+# Seguir registos em tempo real
 docker-compose logs -f www
 ```
 
-### Stop the Application
+### Parar a Aplicação
 ```powershell
 docker-compose stop
 ```
 
-### Start the Application (after stopping)
+### Iniciar a Aplicação (após parar)
 ```powershell
 docker-compose start
 ```
 
-### Stop and Remove Containers
+### Parar e Remover Contentores
 ```powershell
 docker-compose down
 ```
 
-### Rebuild Containers (after changing Dockerfile)
+### Reconstruir Contentores (após alterar o Dockerfile)
 ```powershell
 docker-compose down
 docker-compose up --build -d
 ```
 
-### Access Container Shell
+### Aceder à Shell do Contentor
 ```powershell
-# Access PHP container
+# Aceder ao contentor PHP
 docker-compose exec www bash
 
-# Access MySQL container
+# Aceder ao contentor MySQL
 docker-compose exec db bash
 
-# Run MySQL commands
+# Executar comandos MySQL
 docker-compose exec db mysql -u php_docker -ppassword php_docker
 ```
 
-### Reset Database
-If you need to reset the database:
+### Reiniciar a Base de Dados
+Se precisar de reiniciar a base de dados:
 ```powershell
 docker-compose down -v
 docker-compose up -d
 ```
-The `-v` flag removes volumes, which will delete the database data.
+A flag `-v` remove os volumes, o que eliminará os dados da base de dados.
 
-## Usage
+## Utilização
 
-### Registration
-1. Click "Register" on the home page
-2. Fill in:
-   - Username (must be unique)
-   - Email (must be unique and valid)
-   - Password (minimum 6 characters)
-   - Confirm Password
-3. Click "Register" button
-4. You'll be automatically logged in and redirected to the dashboard
+### Registo
+1. Clique em "Register" na página inicial
+2. Preencha:
+   - Nome de utilizador (deve ser único)
+   - Email (deve ser único e válido)
+   - Palavra-passe (mínimo 6 caracteres)
+   - Confirmar Palavra-passe
+3. Clique no botão "Register"
+4. Será automaticamente autenticado e redirecionado para o painel
 
 ### Login
-1. Click "Login" on the home page
-2. Enter your username and password
-3. Click "Login" button
-4. You'll be redirected to your dashboard
+1. Clique em "Login" na página inicial
+2. Introduza o seu nome de utilizador e palavra-passe
+3. Clique no botão "Login"
+4. Será redirecionado para o seu painel
 
-### Dashboard
-- View your profile information (ID, username, email)
-- Click "View Posts" to access the community posts
-- Click "Logout" to end your session
+### Painel
+- Veja a informação do seu perfil (ID, nome de utilizador, email)
+- Clique em "View Posts" para aceder às publicações da comunidade
+- Clique em "Logout" para terminar a sua sessão
 
-### Working with Posts (Registered Users Only)
+### Trabalhar com Publicações (Apenas Utilizadores Registados)
 
-#### Viewing Posts
-1. From the dashboard, click "View Posts" or "Go to Community Posts"
-2. Browse all posts from the community
-3. Posts are sorted by newest first
-4. Click "Read More" to view full post details
+#### Visualizar Publicações
+1. A partir do painel, clique em "View Posts" ou "Go to Community Posts"
+2. Navegue por todas as publicações da comunidade
+3. As publicações são ordenadas das mais recentes para as mais antigas
+4. Clique em "Read More" para ver os detalhes completos da publicação
 
-#### Creating a Post
-1. Click "Create New Post" button
-2. Enter a title (minimum 3 characters)
-3. Write your content (minimum 10 characters)
-4. Click "Publish Post"
-5. Your post will appear in the community feed
+#### Criar uma Publicação
+1. Clique no botão "Create New Post"
+2. Introduza um título (mínimo 3 caracteres)
+3. Escreva o seu conteúdo (mínimo 10 caracteres)
+4. Clique em "Publish Post"
+5. A sua publicação aparecerá no feed da comunidade
 
-#### Editing Your Posts
-1. On any post you created, click "Edit" button
-2. Modify the title or content
-3. Click "Update Post"
-4. The post's "updated_at" timestamp will be updated
+#### Editar as Suas Publicações
+1. Em qualquer publicação que criou, clique no botão "Edit"
+2. Modifique o título ou o conteúdo
+3. Clique em "Update Post"
+4. O timestamp "updated_at" da publicação será atualizado
 
-#### Deleting Your Posts
-1. On any post you created, click "Delete" button
-2. Confirm the deletion in the popup dialog
-3. The post will be permanently removed
+#### Eliminar as Suas Publicações
+1. Em qualquer publicação que criou, clique no botão "Delete"
+2. Confirme a eliminação na caixa de diálogo
+3. A publicação será permanentemente removida
 
-**Note:** You can only edit or delete posts that you created. Other users' posts are view-only.
+**Nota:** Só pode editar ou eliminar publicações que criou. As publicações de outros utilizadores são apenas de visualização.
 
-## Test Account
+## Conta de Teste
 
-A test user is already created in the database with sample posts:
-- **Username:** `testuser`
-- **Password:** `password123`
+Um utilizador de teste já está criado na base de dados com publicações de exemplo:
+- **Nome de utilizador:** `testuser`
+- **Palavra-passe:** `password123`
 - **Email:** `test@example.com`
 
-**Sample Posts Included:**
-1. "Welcome to the Community!" - Introduction post
-2. "Tips for Getting Started" - Helpful tips post
-3. "What are you working on?" - Discussion post
+**Publicações de Exemplo Incluídas:**
+1. "Welcome to the Community!" - Publicação de introdução
+2. "Tips for Getting Started" - Publicação de dicas úteis
+3. "What are you working on?" - Publicação de discussão
 
-You can login with this account to see existing posts and create your own!
+Pode fazer login com esta conta para ver as publicações existentes e criar as suas próprias!
 
-## Security Features
+## Funcionalidades de Segurança
 
-### Authentication & Authorization
-- Passwords are hashed using `password_hash()` with bcrypt
-- Password verification using `password_verify()`
-- Session-based authentication
-- **Protected Routes:** Posts pages require login
-- **Ownership Validation:** Users can only edit/delete their own posts
+### Autenticação e Autorização
+- As palavras-passe são codificadas usando `password_hash()` com bcrypt
+- Verificação de palavras-passe usando `password_verify()`
+- Autenticação baseada em sessões
+- **Rotas Protegidas:** As páginas de publicações requerem login
+- **Validação de Propriedade:** Os utilizadores só podem editar/eliminar as suas próprias publicações
 
-### Data Protection
-- SQL injection prevention using prepared statements (PDO)
-- Input validation and sanitization (both client and server-side)
-- XSS protection (Smarty auto-escapes output)
-- CSRF protection (form-based)
+### Proteção de Dados
+- Prevenção de injeção SQL usando declarações preparadas (PDO)
+- Validação e sanitização de entradas (tanto do lado do cliente como do servidor)
+- Proteção XSS (o Smarty escapa automaticamente a saída)
+- Proteção CSRF (baseada em formulários)
 
-### Database Security
-- Foreign key constraints (posts linked to users)
-- Cascade deletion (posts deleted when user is deleted)
-- Unique constraints on username and email
+### Segurança da Base de Dados
+- Restrições de chaves estrangeiras (publicações ligadas aos utilizadores)
+- Eliminação em cascata (publicações eliminadas quando o utilizador é eliminado)
+- Restrições de unicidade no nome de utilizador e email
 
-## Validation Rules
+## Regras de Validação
 
-### Registration:
-- All fields are required
-- Password must be at least 6 characters
-- Passwords must match
-- Email must be valid format
-- Username and email must be unique
+### Registo:
+- Todos os campos são obrigatórios
+- A palavra-passe deve ter pelo menos 6 caracteres
+- As palavras-passe devem coincidir
+- O email deve ter um formato válido
+- O nome de utilizador e o email devem ser únicos
 
 ### Login:
-- Username and password are required
-- Credentials must match database records
+- O nome de utilizador e a palavra-passe são obrigatórios
+- As credenciais devem corresponder aos registos da base de dados
 
-### Creating/Editing Posts:
-- Title is required (3-255 characters)
-- Content is required (minimum 10 characters)
-- Only logged-in users can create posts
-- Only post owners can edit/delete their posts
+### Criar/Editar Publicações:
+- O título é obrigatório (3-255 caracteres)
+- O conteúdo é obrigatório (mínimo 10 caracteres)
+- Apenas utilizadores autenticados podem criar publicações
+- Apenas os proprietários das publicações podem editá-las/eliminá-las
 
-## Troubleshooting
+## Resolução de Problemas
 
-### Common Issues and Solutions
+### Problemas Comuns e Soluções
 
-#### 1. Docker Desktop Not Running
-**Error:** `Cannot connect to the Docker daemon`
+#### 1. Docker Desktop Não Está em Execução
+**Erro:** `Cannot connect to the Docker daemon`
 
-**Solution:**
-- Make sure Docker Desktop is running (Windows/Mac)
-- On Linux, start Docker: `sudo systemctl start docker`
+**Solução:**
+- Certifique-se de que o Docker Desktop está em execução (Windows/Mac)
+- No Linux, inicie o Docker: `sudo systemctl start docker`
 
-#### 2. Port Already in Use
-**Error:** `Bind for 0.0.0.0:80 failed: port is already allocated`
+#### 2. Porta Já em Uso
+**Erro:** `Bind for 0.0.0.0:80 failed: port is already allocated`
 
-**Solution:**
-- Another service is using port 80 (like IIS, Apache, or Skype)
-- Option A: Stop the conflicting service
-- Option B: Change the port in `docker-compose.yml`:
+**Solução:**
+- Outro serviço está a usar a porta 80 (como IIS, Apache ou Skype)
+- Opção A: Pare o serviço conflituante
+- Opção B: Altere a porta no `docker-compose.yml`:
   ```yaml
   ports:
-    - 8080:80  # Use port 8080 instead
+    - 8080:80  # Use a porta 8080 em vez disso
   ```
-  Then access via `http://localhost:8080`
+  Depois aceda via `http://localhost:8080`
 
-#### 3. Database Connection Errors
-**Error:** `Connection failed` or `SQLSTATE[HY000] [2002]`
+#### 3. Erros de Ligação à Base de Dados
+**Erro:** `Connection failed` ou `SQLSTATE[HY000] [2002]`
 
-**Solution:**
-- Wait 30-60 seconds for MySQL to fully initialize
-- Check if MySQL container is running: `docker-compose ps`
-- Check MySQL logs: `docker-compose logs db`
-- Verify database credentials in `config.php` match `docker-compose.yml`
+**Solução:**
+- Aguarde 30-60 segundos para o MySQL inicializar completamente
+- Verifique se o contentor MySQL está em execução: `docker-compose ps`
+- Verifique os registos do MySQL: `docker-compose logs db`
+- Verifique se as credenciais da base de dados em `config.php` correspondem ao `docker-compose.yml`
 
-#### 4. Smarty Template Not Found
-**Error:** `Unable to load template file`
+#### 4. Template Smarty Não Encontrado
+**Erro:** `Unable to load template file`
 
-**Solution:**
-- Verify `templates/` directory exists
-- Check file permissions
-- Make sure `templates_c/` directory is created and writable:
+**Solução:**
+- Verifique se o diretório `templates/` existe
+- Verifique as permissões dos ficheiros
+- Certifique-se de que o diretório `templates_c/` está criado e é gravável:
   ```powershell
   docker-compose exec www mkdir -p /var/www/html/templates_c
   docker-compose exec www chmod 777 /var/www/html/templates_c
   ```
 
-#### 5. Composer Dependencies Missing
-**Error:** `Class 'Smarty\Smarty' not found`
+#### 5. Dependências do Composer em Falta
+**Erro:** `Class 'Smarty\Smarty' not found`
 
-**Solution:**
-- Install Composer dependencies:
+**Solução:**
+- Instale as dependências do Composer:
   ```powershell
   docker-compose exec www composer install
   ```
 
-#### 6. Page Shows PHP Code Instead of Running It
-**Problem:** Browser displays PHP code as text
+#### 6. Página Mostra Código PHP em Vez de o Executar
+**Problema:** O navegador mostra o código PHP como texto
 
-**Solution:**
-- Make sure you're accessing via `http://localhost` not `file://`
-- Check if Apache is running: `docker-compose ps`
-- Restart containers: `docker-compose restart www`
+**Solução:**
+- Certifique-se de que está a aceder via `http://localhost` e não `file://`
+- Verifique se o Apache está em execução: `docker-compose ps`
+- Reinicie os contentores: `docker-compose restart www`
 
-#### 7. "Access Denied" When Connecting to Database
-**Solution:**
-- Check credentials in `config.php`:
+#### 7. "Access Denied" ao Ligar à Base de Dados
+**Solução:**
+- Verifique as credenciais em `config.php`:
   ```php
-  define('DB_HOST', 'db');  // Must be 'db' (container name)
+  define('DB_HOST', 'db');  // Deve ser 'db' (nome do contentor)
   define('DB_NAME', 'php_docker');
   define('DB_USER', 'php_docker');
   define('DB_PASS', 'password');
   ```
 
-#### 8. Session Issues
-**Problem:** Can't login or session not persisting
+#### 8. Problemas de Sessão
+**Problema:** Não consegue fazer login ou a sessão não persiste
 
-**Solution:**
-- Clear browser cookies and cache
-- Check if session directory is writable:
+**Solução:**
+- Limpe os cookies e cache do navegador
+- Verifique se o diretório de sessão é gravável:
   ```powershell
   docker-compose exec www php -r "echo session_save_path();"
   ```
 
-#### 9. MySQL Table Doesn't Exist
-**Error:** `Table 'php_docker.users' doesn't exist`
+#### 9. Tabela MySQL Não Existe
+**Erro:** `Table 'php_docker.users' doesn't exist`
 
-**Solution:**
-- Check if `init.sql` was executed:
+**Solução:**
+- Verifique se o `init.sql` foi executado:
   ```powershell
   docker-compose exec db mysql -u php_docker -ppassword php_docker -e "SHOW TABLES;"
   ```
-- If no tables, manually import:
+- Se não houver tabelas, importe manualmente:
   ```powershell
   docker-compose exec -T db mysql -u php_docker -ppassword php_docker < db/init.sql
   ```
 
-#### 10. Changes Not Reflecting
-**Problem:** Code changes don't appear in browser
+#### 10. Alterações Não São Refletidas
+**Problema:** As alterações ao código não aparecem no navegador
 
-**Solution:**
-- Hard refresh: `Ctrl + F5` (Windows) or `Cmd + Shift + R` (Mac)
-- Clear Smarty cache:
+**Solução:**
+- Atualização forçada: `Ctrl + F5` (Windows) ou `Cmd + Shift + R` (Mac)
+- Limpe a cache do Smarty:
   ```powershell
   docker-compose exec www rm -rf /var/www/html/templates_c/*
   docker-compose exec www rm -rf /var/www/html/cache/*
   ```
 
-### Getting More Help
+### Obter Mais Ajuda
 
-Check logs for detailed error messages:
+Verifique os registos para mensagens de erro detalhadas:
 ```powershell
-# PHP/Apache errors
+# Erros PHP/Apache
 docker-compose logs www
 
-# MySQL errors
+# Erros MySQL
 docker-compose logs db
 
-# All errors
+# Todos os erros
 docker-compose logs
 ```
 
-## Technologies Used
+## Tecnologias Utilizadas
 
-- **PHP 8.x** with Apache web server
-- **MySQL 8.x** database
-- **Smarty 4.x** Template Engine
-- **PDO** for secure database connections
-- **Composer** for dependency management
-- **Docker & Docker Compose** for containerization
-- **phpMyAdmin** for database management
+- **PHP 8.x** com servidor web Apache
+- **MySQL 8.x** base de dados
+- **Smarty 4.x** Motor de Templates
+- **PDO** para ligações seguras à base de dados
+- **Composer** para gestão de dependências
+- **Docker & Docker Compose** para contentorização
+- **phpMyAdmin** para gestão da base de dados
 
-## Development Notes
+## Notas de Desenvolvimento
 
-- Sessions are started in `config.php`
-- Database connection uses PDO with exception mode and prepared statements
-- Templates use `.tpl` extension
-- Compiled templates are stored in `templates_c/` directory (auto-generated)
-- All post routes are protected with authentication checks
-- Foreign key relationships ensure data integrity
-- Timestamps are automatically managed by MySQL
+- As sessões são iniciadas em `config.php`
+- A ligação à base de dados usa PDO com modo de exceção e declarações preparadas
+- Os templates usam extensão `.tpl`
+- Os templates compilados são armazenados no diretório `templates_c/` (gerado automaticamente)
+- Todas as rotas de publicações estão protegidas com verificações de autenticação
+- As relações de chaves estrangeiras garantem a integridade dos dados
+- Os timestamps são geridos automaticamente pelo MySQL
 
-## Application URLs
+## URLs da Aplicação
 
-Once the containers are running, access:
-- **Main Application:** [http://localhost](http://localhost)
-- **Posts Page:** [http://localhost/posts.php](http://localhost/posts.php) (requires login)
+Assim que os contentores estiverem em execução, aceda a:
+- **Aplicação Principal:** [http://localhost](http://localhost)
+- **Página de Publicações:** [http://localhost/posts.php](http://localhost/posts.php) (requer login)
 - **phpMyAdmin:** [http://localhost:8001](http://localhost:8001)
-  - Server: `db`
-  - Username: `php_docker`
-  - Password: `password`
+  - Servidor: `db`
+  - Nome de utilizador: `php_docker`
+  - Palavra-passe: `password`
 
-## Additional Documentation
+## Documentação Adicional
 
-For detailed information about the posts feature, see [POSTS_GUIDE.md](POSTS_GUIDE.md)
+Para informação detalhada sobre a funcionalidade de publicações, consulte [POSTS_GUIDE.md](POSTS_GUIDE.md)
 
-## Quick Start Guide
+## Guia de Início Rápido
 
-1. **Install Docker Desktop** (see Prerequisites section)
-2. **Clone or download** this repository
-3. **Open terminal** in project directory
-4. **Run:** `docker-compose up --build -d`
-5. **Wait 30-60 seconds** for MySQL to initialize
-6. **Open browser:** [http://localhost](http://localhost)
-7. **Login** with test account (username: `testuser`, password: `password123`)
-8. **Explore** the dashboard and posts feature!
+1. **Instalar Docker Desktop** (consulte a secção Pré-requisitos)
+2. **Clonar ou transferir** este repositório
+3. **Abrir terminal** no diretório do projeto
+4. **Executar:** `docker-compose up --build -d`
+5. **Aguardar 30-60 segundos** para o MySQL inicializar
+6. **Abrir navegador:** [http://localhost](http://localhost)
+7. **Fazer login** com a conta de teste (nome de utilizador: `testuser`, palavra-passe: `password123`)
+8. **Explorar** o painel e a funcionalidade de publicações!
 
-## Project Structure Overview
+## Visão Geral da Estrutura do Projeto
 
-This is a full-stack web application with:
+Esta é uma aplicação web full-stack com:
 - **Frontend:** HTML5, CSS3, JavaScript (vanilla)
-- **Template Engine:** Smarty for clean MVC separation
-- **Backend:** PHP with object-oriented practices
-- **Database:** MySQL with relational design
-- **Infrastructure:** Docker for easy deployment and consistency
+- **Motor de Templates:** Smarty para separação limpa MVC
+- **Backend:** PHP com práticas orientadas a objetos
+- **Base de Dados:** MySQL com design relacional
+- **Infraestrutura:** Docker para implementação fácil e consistência
