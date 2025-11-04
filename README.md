@@ -4,11 +4,25 @@ This is a complete user authentication system built with PHP, Smarty template en
 
 ## Features
 
+### User Authentication
 - **User Registration** with validation
 - **User Login** with secure password hashing
 - **User Dashboard** showing profile information
 - **Session Management**
-- **Responsive Design**
+
+### Posts System (Registered Users Only)
+- **View All Posts** from all community members
+- **Create Posts** with title and content
+- **Edit Your Posts** with real-time character counter
+- **Delete Your Posts** with confirmation
+- **View Single Post** with full details and author information
+- **Privacy Protected** - Only logged-in users can see posts
+
+### Design
+- **Responsive Design** - Works on all devices
+- **Modern UI** with gradient backgrounds
+- **Color-coded Actions** (Create, Edit, Delete buttons)
+- **Real-time Validation** and character counters
 
 ## Prerequisites
 
@@ -78,12 +92,23 @@ docker-compose --version
 
 ## Database Structure
 
+### Users Table
 The application uses a `users` table with the following columns:
 - `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
 - `username` (VARCHAR(255), UNIQUE)
 - `password` (VARCHAR(255), hashed)
 - `email` (VARCHAR(255), UNIQUE)
 - `created_at` (TIMESTAMP)
+
+### Posts Table
+The `posts` table stores all user posts:
+- `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
+- `user_id` (INT, FOREIGN KEY to users.id)
+- `title` (VARCHAR(255))
+- `content` (TEXT)
+- `created_at` (TIMESTAMP)
+- `updated_at` (TIMESTAMP)
+- **Relationships:** Each post belongs to a user; posts are deleted if user is deleted
 
 ## Files Structure
 
@@ -93,14 +118,27 @@ The application uses a `users` table with the following columns:
 ├── login.php               # Login handler
 ├── register.php            # Registration handler
 ├── logout.php              # Logout handler
+├── posts.php               # View all posts (registered users only)
+├── create_post.php         # Create new post
+├── view_post.php           # View single post details
+├── edit_post.php           # Edit post (owner only)
+├── delete_post.php         # Delete post (owner only)
 ├── db/
-│   └── init.sql           # Database initialization script
+│   ├── init.sql           # Database initialization script (users + posts)
+│   └── posts.sql          # Posts table schema (backup)
 ├── templates/
 │   ├── home.tpl           # Home page template
 │   ├── login.tpl          # Login form template
 │   ├── register.tpl       # Registration form template
-│   └── dashboard.tpl      # User dashboard template
-└── templates_c/           # Smarty compiled templates (auto-generated)
+│   ├── dashboard.tpl      # User dashboard template
+│   ├── posts.tpl          # All posts listing template
+│   ├── create_post.tpl    # Create post form template
+│   ├── view_post.tpl      # Single post view template
+│   └── edit_post.tpl      # Edit post form template
+├── templates_c/           # Smarty compiled templates (auto-generated)
+├── vendor/                # Composer dependencies (Smarty)
+├── README.md              # This file
+└── POSTS_GUIDE.md         # Detailed posts feature documentation
 ```
 
 ## Project Setup Instructions
@@ -299,23 +337,70 @@ The `-v` flag removes volumes, which will delete the database data.
 
 ### Dashboard
 - View your profile information (ID, username, email)
+- Click "View Posts" to access the community posts
 - Click "Logout" to end your session
+
+### Working with Posts (Registered Users Only)
+
+#### Viewing Posts
+1. From the dashboard, click "View Posts" or "Go to Community Posts"
+2. Browse all posts from the community
+3. Posts are sorted by newest first
+4. Click "Read More" to view full post details
+
+#### Creating a Post
+1. Click "Create New Post" button
+2. Enter a title (minimum 3 characters)
+3. Write your content (minimum 10 characters)
+4. Click "Publish Post"
+5. Your post will appear in the community feed
+
+#### Editing Your Posts
+1. On any post you created, click "Edit" button
+2. Modify the title or content
+3. Click "Update Post"
+4. The post's "updated_at" timestamp will be updated
+
+#### Deleting Your Posts
+1. On any post you created, click "Delete" button
+2. Confirm the deletion in the popup dialog
+3. The post will be permanently removed
+
+**Note:** You can only edit or delete posts that you created. Other users' posts are view-only.
 
 ## Test Account
 
-A test user is already created in the database:
+A test user is already created in the database with sample posts:
 - **Username:** `testuser`
 - **Password:** `password123`
 - **Email:** `test@example.com`
 
+**Sample Posts Included:**
+1. "Welcome to the Community!" - Introduction post
+2. "Tips for Getting Started" - Helpful tips post
+3. "What are you working on?" - Discussion post
+
+You can login with this account to see existing posts and create your own!
+
 ## Security Features
 
+### Authentication & Authorization
 - Passwords are hashed using `password_hash()` with bcrypt
 - Password verification using `password_verify()`
 - Session-based authentication
-- SQL injection prevention using prepared statements
-- Input validation and sanitization
+- **Protected Routes:** Posts pages require login
+- **Ownership Validation:** Users can only edit/delete their own posts
+
+### Data Protection
+- SQL injection prevention using prepared statements (PDO)
+- Input validation and sanitization (both client and server-side)
+- XSS protection (Smarty auto-escapes output)
 - CSRF protection (form-based)
+
+### Database Security
+- Foreign key constraints (posts linked to users)
+- Cascade deletion (posts deleted when user is deleted)
+- Unique constraints on username and email
 
 ## Validation Rules
 
@@ -329,6 +414,12 @@ A test user is already created in the database:
 ### Login:
 - Username and password are required
 - Credentials must match database records
+
+### Creating/Editing Posts:
+- Title is required (3-255 characters)
+- Content is required (minimum 10 characters)
+- Only logged-in users can create posts
+- Only post owners can edit/delete their posts
 
 ## Troubleshooting
 
@@ -452,15 +543,54 @@ docker-compose logs
 
 ## Technologies Used
 
-- **PHP 8.x** with Apache
-- **MySQL 8.x**
+- **PHP 8.x** with Apache web server
+- **MySQL 8.x** database
 - **Smarty 4.x** Template Engine
-- **PDO** for database connections
-- **Docker & Docker Compose**
+- **PDO** for secure database connections
+- **Composer** for dependency management
+- **Docker & Docker Compose** for containerization
+- **phpMyAdmin** for database management
 
 ## Development Notes
 
 - Sessions are started in `config.php`
-- Database connection uses PDO with exception mode
+- Database connection uses PDO with exception mode and prepared statements
 - Templates use `.tpl` extension
-- Compiled templates are stored in `templates_c/` directory
+- Compiled templates are stored in `templates_c/` directory (auto-generated)
+- All post routes are protected with authentication checks
+- Foreign key relationships ensure data integrity
+- Timestamps are automatically managed by MySQL
+
+## Application URLs
+
+Once the containers are running, access:
+- **Main Application:** [http://localhost](http://localhost)
+- **Posts Page:** [http://localhost/posts.php](http://localhost/posts.php) (requires login)
+- **phpMyAdmin:** [http://localhost:8001](http://localhost:8001)
+  - Server: `db`
+  - Username: `php_docker`
+  - Password: `password`
+
+## Additional Documentation
+
+For detailed information about the posts feature, see [POSTS_GUIDE.md](POSTS_GUIDE.md)
+
+## Quick Start Guide
+
+1. **Install Docker Desktop** (see Prerequisites section)
+2. **Clone or download** this repository
+3. **Open terminal** in project directory
+4. **Run:** `docker-compose up --build -d`
+5. **Wait 30-60 seconds** for MySQL to initialize
+6. **Open browser:** [http://localhost](http://localhost)
+7. **Login** with test account (username: `testuser`, password: `password123`)
+8. **Explore** the dashboard and posts feature!
+
+## Project Structure Overview
+
+This is a full-stack web application with:
+- **Frontend:** HTML5, CSS3, JavaScript (vanilla)
+- **Template Engine:** Smarty for clean MVC separation
+- **Backend:** PHP with object-oriented practices
+- **Database:** MySQL with relational design
+- **Infrastructure:** Docker for easy deployment and consistency
