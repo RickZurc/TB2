@@ -87,6 +87,24 @@
         .links a:hover {
             text-decoration: underline;
         }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .remember-me input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #667eea;
+        }
+        .remember-me label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-weight: normal;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -100,12 +118,17 @@
         <form method="POST" action="login.php">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+                <input type="text" id="username" name="username" value="{$rememberedUsername}" required>
             </div>
             
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="remember-me">
+                <input type="checkbox" id="remember_me" name="remember_me" {if $rememberedUsername}checked{/if}>
+                <label for="remember_me">Remember me</label>
             </div>
             
             <button type="submit" class="btn">Login</button>
