@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.6.0, created on 2025-11-04 20:00:01
+/* Smarty version 5.6.0, created on 2025-11-04 20:23:54
   from 'file:posts.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.6.0',
-  'unifunc' => 'content_690a5b4156fbe1_48157381',
+  'unifunc' => 'content_690a60da224b37_20921557',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '067d248a2f8243fe5e3352216d5f59610a92ed80' => 
     array (
       0 => 'posts.tpl',
-      1 => 1762286103,
+      1 => 1762287829,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_690a5b4156fbe1_48157381 (\Smarty\Template $_smarty_tpl) {
+function content_690a60da224b37_20921557 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/var/www/html/templates';
 ?><!DOCTYPE html>
 <html lang="en">
@@ -111,6 +111,35 @@ $_smarty_current_dir = '/var/www/html/templates';
         }
         .header-section h1 {
             color: #333;
+        }
+        .btn-create-post {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 14px 32px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-create-post:hover {
+            background: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(72, 187, 120, 0.5);
+        }
+        .btn-create-post:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(72, 187, 120, 0.4);
+        }
+        .btn-create-post svg {
+            width: 20px;
+            height: 20px;
         }
         .post-card {
             background: white;
@@ -215,7 +244,12 @@ $_smarty_current_dir = '/var/www/html/templates';
     <div class="container">
         <div class="header-section">
             <h1>Community Posts</h1>
-            <a href="create_post.php" class="btn-secondary">Create New Post</a>
+            <a href="create_post.php" class="btn-create-post">
+                <svg fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+                Create New Post
+            </a>
         </div>
         
         <?php if ($_smarty_tpl->getValue('posts')) {?>
@@ -275,7 +309,12 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <h3>No posts yet!</h3>
                 <p>Be the first to share something with the community.</p>
                 <br>
-                <a href="create_post.php" class="btn-secondary">Create Your First Post</a>
+                <a href="create_post.php" class="btn-create-post">
+                    <svg fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                    </svg>
+                    Create Your First Post
+                </a>
             </div>
         <?php }?>
     </div>
