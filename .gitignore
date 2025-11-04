@@ -1,1 +1,17 @@
-./templates_c/*
+# Smarty compiled templates
+templates_c/*
+!templates_c/.gitkeep
+
+# Smarty cache
+cache/*
+!cache/.gitkeep
+
+# Composer dependencies
+vendor/
+
+# Environment files
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
